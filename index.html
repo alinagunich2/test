@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>act</title>
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: black;
-}
-
-.canvas {
-  display: block;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: black;
+  }
+  canvas {
+    display: block;
+  }
 </style>
 </head>
 <body>
@@ -35,12 +34,15 @@ let offset = 0;
 
 function draw() {
   const stripeWidth = 10;
-  offset += 2; // скорость движения
+  offset = (offset + 2) % (stripeWidth * 2); // сброс по модулю для бесконечности
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (let x = -stripeWidth; x < canvas.width + stripeWidth; x += stripeWidth) {
-    ctx.fillStyle = (Math.floor((x + offset) / stripeWidth) % 2 === 0) ? '#fff' : '#000';
-    ctx.fillRect(x + offset, 0, stripeWidth, canvas.height);
+  // Рисуем полосы с учётом offset, чтобы полотно выглядело бесконечным
+  for (let x = -stripeWidth * 2; x < canvas.width + stripeWidth * 2; x += stripeWidth) {
+    const colorIndex = Math.floor((x + offset) / stripeWidth) % 2;
+    ctx.fillStyle = (colorIndex === 0) ? '#fff' : '#000';
+    ctx.fillRect(x - offset, 0, stripeWidth, canvas.height);
   }
 
   requestAnimationFrame(draw);
@@ -50,4 +52,3 @@ draw();
 </script>
 </body>
 </html>
-
