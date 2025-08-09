@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>act</title>
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: black;
+}
+
+.canvas {
+  display: block;
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+let offset = 0;
+
+function draw() {
+  const stripeWidth = 10;
+  offset += 2; // скорость движения
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let x = -stripeWidth; x < canvas.width + stripeWidth; x += stripeWidth) {
+    ctx.fillStyle = (Math.floor((x + offset) / stripeWidth) % 2 === 0) ? '#fff' : '#000';
+    ctx.fillRect(x + offset, 0, stripeWidth, canvas.height);
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
+
