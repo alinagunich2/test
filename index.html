@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>act</title>
+<title>Зигзаги</title>
 <style>
   html, body {
     margin: 0;
@@ -32,17 +32,35 @@ resize();
 
 let offset = 0;
 
+function drawZigzag(x, y, size, height, color) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + size / 2, y + height);
+  ctx.lineTo(x + size, y);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 4;
+  ctx.stroke();
+}
+
 function draw() {
-  const stripeWidth = 10;
-  offset = (offset + 2) % (stripeWidth * 2); // сброс по модулю для бесконечности
+  const zigzagWidth = 40; // ширина одного зигзага
+  const zigzagHeight = 30; // высота зигзага
+  const lineSpacing = 10; // расстояние между горизонтальными линиями зигзагов
+  const speed = 2;
+
+  offset = (offset + speed) % zigzagWidth;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.lineCap = "round";
 
-  // Рисуем полосы с учётом offset, чтобы полотно выглядело бесконечным
-  for (let x = -stripeWidth * 2; x < canvas.width + stripeWidth * 2; x += stripeWidth) {
-    const colorIndex = Math.floor((x + offset) / stripeWidth) % 2;
-    ctx.fillStyle = (colorIndex === 0) ? '#fff' : '#000';
-    ctx.fillRect(x - offset, 0, stripeWidth, canvas.height);
+  // Рисуем вертикально ряды зигзагов с шагом lineSpacing
+  for(let y = lineSpacing; y < canvas.height; y += lineSpacing) {
+    // Для каждого ряда рисуем зигзаги по горизонтали
+    for(let x = -zigzagWidth*2; x < canvas.width + zigzagWidth*2; x += zigzagWidth) {
+      // Цвет чередуем для полосок — белый и черный
+      const color = (Math.floor((x + offset) / zigzagWidth) % 2 === 0) ? '#fff' : '#000';
+      drawZigzag(x - offset, y, zigzagWidth, zigzagHeight, color);
+    }
   }
 
   requestAnimationFrame(draw);
